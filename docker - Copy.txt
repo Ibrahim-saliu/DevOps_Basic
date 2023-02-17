@@ -1,0 +1,152 @@
+DOCKER COMMANDS
+===============
+DOCKER RUN
+----------
+- docker run : run a container from an image - start the container
+		pulls if the image does not exis
+- docker run -d (--detach mode) (use docker run --attach <Cont. ID>) to bring it back online
+- docker run -a (--attached - provide the container id)
+- docker run -it <docker file> : interactive mode
+- docker run -p 00:0000 == to map host (so clienst can access your host). The same port cannot be used twice
+- docker run -v  <your_dir_on_host:docker_cont_host>map a directory outside your container host to have persistent storage
+
+******Example : docker run -p 38282:8080 --name blue-app -e APP_COLOR=blue -d kodekloud/simple-webapp******
+
+- docker ps : list info about the container
+- a option === show all running 
+- docker inspect cont id. (to get infor about the containers)
+- docker logs container.id (to get and view logs)
+
+- docker stop <container id or name> : to stop 
+
+- docker rm : to remove the container
+
+- docker images : to see a list of images and sizes
+
+- docker rmi - to remove an image you are not using )ensure all containers running the image are deleted)
+
+- docker pull -- to pull an image and not run it
+
+- docker exec  : to print the content of an etc/host file
+
+80f8ad4812164f09aa76062ee2ec6655
+
+
+
+ENVIRONMENT VARIABLES
+======================
+to update an environment variable, run 
+- docker run -e <ENV_VAR="value"> <dockerfile or image>
+
+- docker inspect (to get the description of the container)
+ 	go to the config section to view your desired variables
+
+
+DOCKER IMAGES
+==============
+How to create an image
+-----------------------
+	- Create a dockerfile containing instructions of what you want to achieve (see dockerfile)
+
+	- run : docker build Dockerfile -t <name_for the tag you want to add to image> .   (ensure a dot is added at the end)
+
+	- run : docker push <name_of_image> ============= to push to docker registry
+
+	- ENTYRPOINT allows us to specify what command we want to executes when the image is run as a container
+
+	- run : docker history <image_name>
+
+***** All Docker files must start with a "FROM" Command*****
+
+
+COMMAND vs ENTRYPOINT
+=======================
+A container only lives as long as the process it runs is alive
+
+- docker run ubunte [COMMAND]  *** example *** === docker run ubuntu sleep 5
+	- The command can be used in 2 ways : "CMD sleep 5" or CMD ["sleep", "5"]
+	
+
+ENTRYPOINT is like a command that instructs the image to behave in the you have specified when you run the image
+	- ENTRYPOINT ["sleep"]
+
+To configure your image in a way that the "sleep" in this case is always executed without error even when the number of seconds is not specified, use bothe ENTYRPOINT ["sleep"] and CMD ["5"]together
+
+	- Another option is to use "docker run --entrypoint sleep2.0 <your_image>"  == This will ovewrite the ENTRYPOINT settings
+
+
+NETWORKING IN DOCKER
+========================
+Docker creates 3 network
+BRIDGE - default network the container is asociated with  ===  docker run <image> 
+	- private network provideing private IP (172.17.0.1)
+	- containers can interact with each other but the outside cant interact with them (you will need to map them to the host)
+	- You can create your new bridge network if you wanna isolate conatiners on the bridge network using :
+		- docker network create --driver bridge --subnet <subnet_IP> <custom_bridge_network_name>
+		- docker network ls
+		- docker inspect == to view the network settings
+
+NONE - docker run <image> --network=none
+	- containers are not attached to any network and are isolated
+
+HOST -  docker run <image> --network=host
+	- here, the conatiners are directly attached to the host and are easily assessible from the outside world
+	- downside is that no other conatiner can be attached to it 
+	- WOULD NOT RECOMMEND THIS 
+
+*********** - Docker uses separate network namespaces that create separates sevaral namesspaces for conatiners on the same host***********
+		- uses virtual ethernet pairs to connect containers together
+
+
+***********************************************RUNNING DOCKER COMMAND****************************************************************
+=========================================================================================================================================
+docker run --network=wp-mysql-network -e DB_Host=mysql-db -e DB_Password=db_pass123 -p 38080:8080 --name webapp --link mysql-db:mysql-db -d kodekloud/simple-webapp-mysql
+============================================================================================================================================
+*********************************************************************************************************************************************
+
+
+DOCKER STORAGE
+================
+/var/lib/docker  - (where docker saves its contents)
+
+For persistent storage, use 
+---------------------------
+- docker volume create <volume_name>
+- docker run -v <volume_name:/var/lib/image <image_name>  ----- VOLUME MOUNTING
+- docker run -v /<your_desired_path>:/var/lib/image <image_name> === when you want to store your data in an external storage on your docker host ----- BIND MOUNTING
+
+- docker run \
+	--mount type=bind, source=<your_desired_source>, target=/var/lib/image <image_name>
+
+- Docker uses storage driver to manage storage. Some are (AUFS (ubuntu's default), ZFS, BTRFS, Device Mapping, Overlay, Overlay2) ---- choice is dependent on the OS.
+
+
+
+
+DOCKER COMPOSE  ==== You need to install these separately (check documentations)  
+===============
+This allows you to set up complex app running multiple service using docker-compose.yml.
+
+- docker-compose up ==== running container on a single docker host
+
+
+CONTAINER ORCHESTRATION
+========================
+- docker service create --replicas=<n> <image>  == must be run on the manager node
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
