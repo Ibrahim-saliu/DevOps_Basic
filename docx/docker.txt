@@ -28,6 +28,15 @@ DOCKER RUN
 - docker pull -- to pull an image and not run it
 
 - docker exec  : to print the content of an etc/host file
+- docker exec -it <container id> ps -aux ========= to run commands in the container 
+- docker exec -it 676e011c609b sh ============== to run a shell and be connected to the shell
+
+- docker start <cont id> ===================== to start a stopped container
+- docker retart <cont id> ====================== to restart a  container 
+
+
+
+
 
 80f8ad4812164f09aa76062ee2ec6655
 
@@ -135,7 +144,20 @@ CONTAINER ORCHESTRATION
 - docker service create --replicas=<n> <image>  == must be run on the manager node
 
 
+DOCKER FILE
+============
 
+INSTRUCTIONS
+------------
+FROM : set the base of the image
+LABEL : add metadata to an image
+
+RUN : Runs command in a new layer 
+COPY : copies new files/folders from source (client machine) to destination (new image layer) 
+ADD : do as above but also from remote url and do extraction (ad application/web files)
+
+CMD :  sets the default executable of a container & arguements. Can be overidden via docker run parameters
+ENTRYPOINT : as above but can't be overidden.
 
 
 
