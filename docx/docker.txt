@@ -32,13 +32,13 @@ DOCKER RUN
 - docker exec -it 676e011c609b sh ============== to run a shell and be connected to the shell
 
 - docker start <cont id> ===================== to start a stopped container
-- docker retart <cont id> ====================== to restart a  container 
+- docker retart <cont id> ====================== to restart a  container \
+
+- docker tag local-image:tagname new-repo:tagname
+- docker push new-repo:tagname
+- docker push oriade/newcontainerofcats:tagname
 
 
-
-
-
-80f8ad4812164f09aa76062ee2ec6655
 
 
 
@@ -49,6 +49,9 @@ to update an environment variable, run
 
 - docker inspect (to get the description of the container)
  	go to the config section to view your desired variables
+
+
+
 
 
 DOCKER IMAGES
@@ -158,6 +161,10 @@ ADD : do as above but also from remote url and do extraction (ad application/web
 
 CMD :  sets the default executable of a container & arguements. Can be overidden via docker run parameters
 ENTRYPOINT : as above but can't be overidden.
+
+EXPOSE : informs docker what port your container app is runnin on (informs only, no configuration is done)
+
+
 
 
 
